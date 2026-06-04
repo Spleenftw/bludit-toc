@@ -1,4 +1,6 @@
 {
-	"plugin-name": "Table of Contents",
-	"plugin-description": "Sticky ToC sidebar (desktop) and floating drawer (mobile) generated from the article's h2/h3/h4 headings."
+	"plugin-data": {
+		"name": "Table of Contents",
+		"description": "Sticky ToC sidebar (desktop) and floating drawer (mobile) built from the article's h2/h3/h4 headings."
+	}
 }
