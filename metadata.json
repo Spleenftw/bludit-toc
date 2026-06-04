@@ -1,0 +1,10 @@
+{
+	"author": "spleenftw",
+	"email": "",
+	"website": "https://github.com/spleenftw/bludit-toc",
+	"version": "1.0.0",
+	"releaseDate": "2026-06-04",
+	"license": "MIT",
+	"compatible": "3.22.0",
+	"notes": "Sticky Table of Contents sidebar (desktop) and floating drawer (mobile) built from the article's h2/h3/h4 headings."
+}

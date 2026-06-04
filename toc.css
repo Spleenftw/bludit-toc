@@ -1,0 +1,223 @@
+/* =============================================================
+   Bludit ToC Plugin — toc.css
+   Self-contained: no dependency on the host theme's CSS variables.
+   Dark mode is handled via prefers-color-scheme.
+   If the theme exposes --accent / --text-muted / --bg-primary,
+   those are layered on top via @supports for a seamless integration.
+   ============================================================= */
+
+/* ---- Color tokens (light) ---- */
+#bltoc-sidebar {
+    --bltoc-text:       #777;
+    --bltoc-hover:      #111;
+    --bltoc-active:     #0066cc;
+    --bltoc-label:      #999;
+    --bltoc-bg:         #fff;
+    --bltoc-border:     rgba(0,0,0,0.08);
+    --bltoc-fab-bg:     #0066cc;
+    --bltoc-fab-color:  #fff;
+}
+
+/* ---- Color tokens (dark) ---- */
+@media (prefers-color-scheme: dark) {
+    #bltoc-sidebar {
+        --bltoc-text:   #999;
+        --bltoc-hover:  #eee;
+        --bltoc-active: #4d9fff;
+        --bltoc-label:  #666;
+        --bltoc-bg:     #1a1a1a;
+        --bltoc-border: rgba(255,255,255,0.08);
+    }
+}
+
+/* Let blowdit (or any theme) override via its own design tokens */
+@supports (color: var(--accent)) {
+    #bltoc-sidebar { --bltoc-active: var(--accent); }
+}
+@supports (color: var(--text-muted)) {
+    #bltoc-sidebar { --bltoc-text: var(--text-muted); }
+}
+@supports (color: var(--bg-primary)) {
+    #bltoc-sidebar { --bltoc-bg: var(--bg-primary); }
+}
+
+/* ============================================================
+   Desktop fixed sidebar
+   Visible only at min-width set by the admin (default 1280px).
+   JS adds .bltoc-ready when headings are found, making it appear.
+   ============================================================ */
+.bltoc-sidebar {
+    display: none; /* hidden until JS confirms headings exist */
+    position: fixed;
+    left: 1rem;
+    top: 5rem;   /* approx below a typical navbar; fine-tuned with navbarHeight in JS */
+    width: 210px;
+    max-height: calc(100vh - 6rem);
+    overflow-y: auto;
+    overflow-x: hidden;
+    z-index: 200;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    scrollbar-width: thin;
+    scrollbar-color: var(--bltoc-border) transparent;
+}
+
+/* JS adds data-bltoc-minwidth on <html>; sidebar shows only above that threshold. */
+/* Actual media-query breakpoint is injected by JS via a <style> tag since the
+   min-width value is dynamic (set in admin). */
+
+/* ---- Sidebar header ("On this page") ---- */
+.bltoc-header {
+    margin-bottom: 0.65rem;
+}
+
+.bltoc-title {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--bltoc-label);
+}
+
+/* ---- ToC list ---- */
+.bltoc-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.bltoc-item {
+    padding: 0.12rem 0;
+}
+
+.bltoc-h3 { padding-left: 0.75rem; }
+.bltoc-h4 { padding-left: 1.5rem; }
+
+.bltoc-link {
+    display: block;
+    color: var(--bltoc-text);
+    text-decoration: none;
+    line-height: 1.5;
+    transition: color 0.15s ease;
+}
+
+.bltoc-link:hover {
+    color: var(--bltoc-hover);
+    text-decoration: none;
+}
+
+.bltoc-link.active {
+    color: var(--bltoc-active);
+    font-weight: 600;
+}
+
+/* ============================================================
+   Mobile floating action button + bottom drawer
+   FAB appears below the sidebar breakpoint.
+   Both are injected by JS, but their CSS lives here.
+   ============================================================ */
+.bltoc-fab {
+    display: none; /* shown by JS via flex when headings exist */
+    position: fixed;
+    left: 1.5rem;
+    bottom: 1.5rem;
+    z-index: 1500;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    border: none;
+    background: var(--bltoc-fab-bg, #0066cc);
+    color: var(--bltoc-fab-color, #fff);
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.25);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.bltoc-fab:hover {
+    transform: scale(1.08);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+}
+
+.bltoc-fab svg { display: block; }
+
+/* ---- Bottom drawer backdrop ---- */
+.bltoc-drawer {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    background: rgba(0, 0, 0, 0.45);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.22s ease, visibility 0s linear 0.22s;
+}
+
+.bltoc-drawer.is-open {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.22s ease;
+}
+
+/* ---- Drawer panel (slides up from bottom) ---- */
+.bltoc-drawer-panel {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border-radius: 1rem 1rem 0 0;
+    padding: 1.5rem 1.5rem calc(1.5rem + env(safe-area-inset-bottom, 0px));
+    max-height: 72vh;
+    overflow-y: auto;
+    transform: translateY(100%);
+    transition: transform 0.25s ease;
+}
+
+@media (prefers-color-scheme: dark) {
+    .bltoc-drawer-panel { background: #1e1e1e; }
+}
+
+@supports (color: var(--bg-primary)) {
+    .bltoc-drawer-panel { background: var(--bg-primary); }
+}
+
+.bltoc-drawer.is-open .bltoc-drawer-panel {
+    transform: translateY(0);
+}
+
+.bltoc-drawer-title {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #999;
+    margin-bottom: 0.75rem;
+}
+
+.bltoc-drawer .bltoc-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.bltoc-drawer .bltoc-link {
+    display: block;
+    padding: 0.5rem 0;
+    color: #555;
+    text-decoration: none;
+}
+
+.bltoc-drawer .bltoc-link:hover {
+    color: #0066cc;
+    text-decoration: none;
+}
+
+@media (prefers-color-scheme: dark) {
+    .bltoc-drawer .bltoc-link       { color: #ccc; }
+    .bltoc-drawer .bltoc-link:hover { color: #4d9fff; }
+}
+
+@supports (color: var(--accent)) {
+    .bltoc-drawer .bltoc-link:hover { color: var(--accent); }
+}
