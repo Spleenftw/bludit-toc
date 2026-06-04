@@ -7,6 +7,7 @@ class PluginBluditToc extends Plugin {
         $this->dbFields    = array(
             'title'        => 'On this page',
             'navbarHeight' => 80,
+            'maxLevel'     => 4,
         );
     }
 
@@ -15,12 +16,23 @@ class PluginBluditToc extends Plugin {
 
         $title        = htmlspecialchars($this->getValue('title'), ENT_QUOTES, 'UTF-8');
         $navbarHeight = (int) $this->getValue('navbarHeight');
+        $maxLevel     = (int) $this->getValue('maxLevel');
 
         $h  = '';
 
         $h .= '<div class="form-group">';
         $h .= '<label>' . $L->get('Sidebar title') . '</label>';
         $h .= '<input class="form-control" type="text" name="title" value="' . $title . '">';
+        $h .= '</div>';
+
+        $h .= '<div class="form-group">';
+        $h .= '<label>' . $L->get('Heading depth') . '</label>';
+        $h .= '<select class="form-control" name="maxLevel">';
+        $h .= '<option value="2"' . ($maxLevel === 2 ? ' selected' : '') . '>h2</option>';
+        $h .= '<option value="3"' . ($maxLevel === 3 ? ' selected' : '') . '>h2, h3</option>';
+        $h .= '<option value="4"' . ($maxLevel === 4 ? ' selected' : '') . '>h2, h3, h4</option>';
+        $h .= '</select>';
+        $h .= '<small class="form-text text-muted">' . $L->get('Deepest heading level included in the table of contents.') . '</small>';
         $h .= '</div>';
 
         $h .= '<div class="form-group">';
@@ -76,17 +88,20 @@ class PluginBluditToc extends Plugin {
     public function siteBodyEnd() {
         $title        = json_encode($this->getValue('title'));
         $navbarHeight = (int) $this->getValue('navbarHeight');
+        $maxLevel     = (int) $this->getValue('maxLevel');
 
         return '<script>(function(){' .
             'var TITLE=' . $title . ',' .
-            'NAVBAR_HEIGHT=' . $navbarHeight . ';' .
+            'NAVBAR_HEIGHT=' . $navbarHeight . ',' .
+            'MAX_LEVEL=' . $maxLevel . ';' .
 
             /* ---- Find content area ---- */
             'var content=document.querySelector(".content")||document.querySelector("article .entry-content")||document.querySelector(".entry-content")||document.querySelector(".post-content");' .
             'if(!content)return;' .
 
-            /* ---- Collect headings ---- */
-            'var headings=content.querySelectorAll("h2,h3,h4");' .
+            /* ---- Collect headings (up to MAX_LEVEL) ---- */
+            'var sel="h2";if(MAX_LEVEL>=3)sel+=",h3";if(MAX_LEVEL>=4)sel+=",h4";' .
+            'var headings=content.querySelectorAll(sel);' .
             'if(!headings.length)return;' .
 
             /* ---- Assign IDs ---- */
