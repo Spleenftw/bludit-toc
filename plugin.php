@@ -60,7 +60,7 @@ class PluginBluditToc extends Plugin {
      */
     public function siteHead() {
         $url = DOMAIN_PLUGINS . $this->directoryName . '/toc.css';
-        return HTML::style($url) . PHP_EOL;
+        return '<link rel="stylesheet" type="text/css" href="' . $url . '">' . PHP_EOL;
     }
 
     /**
@@ -87,7 +87,7 @@ class PluginBluditToc extends Plugin {
         $url          = DOMAIN_PLUGINS . $this->directoryName . '/toc.js';
 
         $out  = '<script>window.BLTOC={title:' . $title . ',navbarHeight:' . $navbarHeight . ',minWidth:' . $minWidth . '};</script>' . PHP_EOL;
-        $out .= HTML::script($url) . PHP_EOL;
+        $out .= '<script defer src="' . $url . '"></script>' . PHP_EOL;
         return $out;
     }
 }
