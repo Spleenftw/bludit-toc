@@ -27,9 +27,9 @@ class PluginBluditToc extends Plugin {
     public function form() {
         global $L;
 
-        $title        = htmlspecialchars($this->getDbField('title'), ENT_QUOTES, 'UTF-8');
-        $navbarHeight = (int) $this->getDbField('navbarHeight');
-        $minWidth     = (int) $this->getDbField('minWidth');
+        $title        = htmlspecialchars($this->getValue('title'), ENT_QUOTES, 'UTF-8');
+        $navbarHeight = (int) $this->getValue('navbarHeight');
+        $minWidth     = (int) $this->getValue('minWidth');
 
         $h  = '';
 
@@ -69,7 +69,7 @@ class PluginBluditToc extends Plugin {
      * JS will populate <nav id="bltoc-nav"> and mark the container visible.
      */
     public function siteBodyBegin() {
-        $title = htmlspecialchars($this->getDbField('title'), ENT_QUOTES, 'UTF-8');
+        $title = htmlspecialchars($this->getValue('title'), ENT_QUOTES, 'UTF-8');
         return '<aside class="bltoc-sidebar" id="bltoc-sidebar" aria-label="' . $title . '">'
              . '<div class="bltoc-header"><span class="bltoc-title">' . $title . '</span></div>'
              . '<nav id="bltoc-nav" aria-label="' . $title . '"></nav>'
@@ -81,9 +81,9 @@ class PluginBluditToc extends Plugin {
      * Config is passed via window.BLTOC so the JS file stays cache-friendly.
      */
     public function siteBodyEnd() {
-        $title        = json_encode($this->getDbField('title'));
-        $navbarHeight = (int) $this->getDbField('navbarHeight');
-        $minWidth     = (int) $this->getDbField('minWidth');
+        $title        = json_encode($this->getValue('title'));
+        $navbarHeight = (int) $this->getValue('navbarHeight');
+        $minWidth     = (int) $this->getValue('minWidth');
         $url          = DOMAIN_PLUGINS . $this->directoryName . '/toc.js';
 
         $out  = '<script>window.BLTOC={title:' . $title . ',navbarHeight:' . $navbarHeight . ',minWidth:' . $minWidth . '};</script>' . PHP_EOL;
