@@ -1,6 +1,4 @@
 {
-	"plugin-bludit-toc": {
-		"name": "Table of Contents",
-		"description": "Sticky ToC sidebar (desktop) and floating drawer (mobile) generated from the article's h2/h3/h4 headings."
-	}
+	"plugin-name": "Table of Contents",
+	"plugin-description": "Sticky ToC sidebar (desktop) and floating drawer (mobile) generated from the article's h2/h3/h4 headings."
 }

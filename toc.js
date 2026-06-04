@@ -18,12 +18,12 @@
     document.head.appendChild(styleEl);
 
     /* ---- Find the article content area ---- */
+    /* Only match unambiguous single-article containers to avoid firing on
+       homepage post-list cards that also contain <article> and <h2> tags. */
     var content = document.querySelector('.content')
                || document.querySelector('article .entry-content')
                || document.querySelector('.entry-content')
-               || document.querySelector('.post-content')
-               || document.querySelector('article')
-               || document.querySelector('main');
+               || document.querySelector('.post-content');
 
     if (!content) return;
 
