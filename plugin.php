@@ -56,8 +56,8 @@ class PluginBluditToc extends Plugin {
 .bltoc-item{padding:.12rem 0}
 .bltoc-h3{padding-left:.75rem}
 .bltoc-h4{padding-left:1.5rem}
-.bltoc-link{display:block;color:var(--bltoc-text,#777);text-decoration:none;line-height:1.5;transition:color .15s ease}
-.bltoc-link:hover{color:var(--bltoc-hover,#111);text-decoration:none}
+.bltoc-link{display:block;color:var(--bltoc-text,#777);text-decoration:none;border:none;box-shadow:none;line-height:1.5;transition:color .15s ease}
+.bltoc-link:hover,.bltoc-link:focus,.bltoc-link:active{color:var(--bltoc-hover,#111);text-decoration:none;border:none;box-shadow:none}
 .bltoc-link.active{color:var(--bltoc-active,#0066cc);font-weight:600}
 .bltoc-fab{display:none;position:fixed;left:1.5rem;bottom:1.5rem;z-index:1500;width:46px;height:46px;border-radius:50%;border:none;background:#0066cc;color:#fff;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 3px 10px rgba(0,0,0,.25);transition:transform .15s ease,box-shadow .15s ease}
 .bltoc-fab:hover{transform:scale(1.08);box-shadow:0 4px 14px rgba(0,0,0,.3)}
